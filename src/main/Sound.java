@@ -12,7 +12,7 @@ public class Sound {
     public float volume;
 
     public Sound() {
-        soundURL[0] = getClass().getResource("/sound/331298__cebuana__oneminute.wav");
+        soundURL[0] = getClass().getResource("/sound/intro.wav");
         soundURL[1] = getClass().getResource("/sound/slam.wav");
         soundURL[2] = getClass().getResource("/sound/obtain.wav");
         soundURL[3] = getClass().getResource("/sound/death.wav");
