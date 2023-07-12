@@ -16,7 +16,7 @@ public abstract class Entity {
     public boolean collisionOn = false;
     public Rectangle solidArea = new Rectangle(0, 0, 32, 32);
     public int solidAreaDefaultX, solidAreaDefaultY;
-    public BufferedImage img, img2;
+    public BufferedImage img, img2 = LoadSave.GetSpriteAtlas(LoadSave.HEART_FULL);
     public int score;
 
     public int life;
@@ -97,6 +97,7 @@ public abstract class Entity {
         int screenY = y - gamePanel.player.y + gamePanel.player.screenY;
 
         g.drawImage(sprite[aniIndex], screenX, screenY, gamePanel.tileSize, gamePanel.tileSize, null);
+
         g.setColor(Color.RED);
         g.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
     }
