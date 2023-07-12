@@ -3,7 +3,6 @@ package main;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-
 public class KeyboardInputs implements KeyListener {
     private GamePanel gamePanel;
     public boolean up, down, left, right;
@@ -22,28 +21,18 @@ public class KeyboardInputs implements KeyListener {
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();
 
-        // TITLE
         if (gamePanel.gameState == gamePanel.TITLE) {
             titleState(code);
         }
-
-        // PLAYING
         if (gamePanel.gameState == gamePanel.PLAYING) {
             playState(code);
         }
-
-        // option
         if (gamePanel.gameState == gamePanel.PAUSE) {
             optionState(code);
         }
-
-        //GAME OVER
         if (gamePanel.gameState == gamePanel.GAMEOVER) {
             gameOverState(code);
-
         }
-
-
     }
 
     @Override
@@ -85,7 +74,7 @@ public class KeyboardInputs implements KeyListener {
             left = true;
         if (code == KeyEvent.VK_D)
             right = true;
-        if (code == KeyEvent.VK_SPACE) { // shake
+        if (code == KeyEvent.VK_SPACE) {
             spacePressed = true;
         }
         if (code == KeyEvent.VK_P) {
@@ -146,13 +135,9 @@ public class KeyboardInputs implements KeyListener {
             }
 
             if (code == KeyEvent.VK_ENTER) {
-                if (gamePanel.ui.commandNum == 0)
-                    // sound
-                    System.out.println("volume");
                 if (gamePanel.ui.commandNum == 1) {
                     gamePanel.ui.subState = 2;
                     gamePanel.ui.commandNum = 0;
-                    System.out.println("control");
                 }
                 if (gamePanel.ui.commandNum == 2) {
                     gamePanel.ui.subState = 0;
@@ -170,7 +155,8 @@ public class KeyboardInputs implements KeyListener {
 
     private void gameOverState(int code) {
         if (code == KeyEvent.VK_ENTER) {
-
+            gamePanel.stopMusic();
+            gamePanel.playMusic(5);
             gamePanel.restart();
             gamePanel.gameState = gamePanel.PLAYING;
         }

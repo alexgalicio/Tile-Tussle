@@ -3,6 +3,7 @@ package main;
 import entities.Enemy;
 import entities.Entity;
 import entities.Player;
+import environment.EnvironmentManager;
 import gamestate.GameState;
 import tile.TileManager;
 
@@ -38,6 +39,7 @@ public class GamePanel extends JPanel implements Runnable {
     public Entity[] enemy;
     ArrayList<Entity> entities = new ArrayList<>();
     public Sound se, music;
+    private EnvironmentManager em;
 
     // game state
     public int gameState;
@@ -60,6 +62,14 @@ public class GamePanel extends JPanel implements Runnable {
         Color color = new Color(255, 241, 232);
         setBackground(color);
 
+        initClasses();
+
+        setFocusable(true);
+        requestFocus();
+        startGameLoop();
+    }
+
+    private void initClasses() {
         keyboardInputs = new KeyboardInputs(this);
         addKeyListener(keyboardInputs);
 
@@ -72,10 +82,7 @@ public class GamePanel extends JPanel implements Runnable {
         ui = new UI(this);
         se = new Sound();
         music = new Sound();
-
-        setFocusable(true);
-        requestFocus();
-        startGameLoop();
+        em = new EnvironmentManager(this);
     }
 
     private void setWindowSize() {
@@ -88,12 +95,15 @@ public class GamePanel extends JPanel implements Runnable {
         assetSetter.setEnemy();
         gameState = TITLE;
         playMusic(0);
+
+        em.setUp();
     }
 
     public void restart() {
         player.setDefaultValues();
         assetSetter.setObject();
         assetSetter.setEnemy();
+        em.setUp();
     }
 
     public void update() {
@@ -121,6 +131,8 @@ public class GamePanel extends JPanel implements Runnable {
                     shakeY = 0;
                 }
             }
+
+            em.update();
         }
 
     }
@@ -147,18 +159,14 @@ public class GamePanel extends JPanel implements Runnable {
                     entities.add(entity);
             }
 
-            Collections.sort(entities, new Comparator<Entity>() {
-                @Override
-                public int compare(Entity o1, Entity o2) {
-                    return Integer.compare(o1.x, o2.y);
-                }
-            });
+            entities.sort((o1, o2) -> Integer.compare(o1.x, o2.y));
 
             for (Entity entity : entities) {
                 entity.draw(g);
             }
 
             entities.clear();
+            em.draw(g);
             ui.draw(g);
         }
 

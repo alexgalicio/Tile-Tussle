@@ -31,16 +31,11 @@ public class TileManager {
         tile[1] = new Tile();
         tile[1].img = LoadSave.GetSpriteAtlas(LoadSave.TILE2);
         tile[1].collision = true;
-
-        tile[2] = new Tile();
-        tile[2].img = LoadSave.GetSpriteAtlas(LoadSave.TILE6);
-        tile[2].collision = true;
-
     }
 
     public void loadMap() {
         try {
-            InputStream is = getClass().getResourceAsStream("/map03.txt");
+            InputStream is = getClass().getResourceAsStream("/map01.txt");
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
             int col = 0, row = 0;

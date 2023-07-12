@@ -117,9 +117,6 @@ public class Player extends Entity {
         int objectIndex = gamePanel.collisionChecker.checkObject(this, true);
         pickUpObject(objectIndex);
 
-//        int monsterIndex = gamePanel.collisionChecker.checkEntity(this, gamePanel.enemy);
-//        contactMonster(monsterIndex);
-
         if (!collisionOn) {
             if (keyboardInputs.left || keyboardInputs.right || keyboardInputs.up || keyboardInputs.down) {
                 switch (direction) {
@@ -150,16 +147,6 @@ public class Player extends Entity {
         assetSetter.setObject();
         assetSetter.setEnemy();
     }
-
-//    private void contactMonster(int monsterIndex) {
-//        if (monsterIndex != 999) {
-//            if (!invincible) {
-//                gamePanel.playSE(4);
-//                life -= 1;
-//                invincible = true;
-//            }
-//        }
-//    }
 
     private void pickUpObject(int objectIndex) {
         if (objectIndex != 999) {
@@ -220,8 +207,6 @@ public class Player extends Entity {
 
         g.setColor(Color.RED);
         g.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
-
-        g.drawString("Invincible: " + invincibleCounter, screenX, screenY);
 
     }
 }

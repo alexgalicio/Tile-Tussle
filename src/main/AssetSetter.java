@@ -27,6 +27,18 @@ public class AssetSetter {
             tileObject.y = row * gamePanel.tileSize;
             gamePanel.obj[i] = tileObject;
         }
+
+        if (gamePanel.player.life < 3) {
+            Heart heart = new Heart(gamePanel);
+            int column = random.nextInt(10) + 3;
+            int row = random.nextInt(10) + 3;
+
+            heart.x = column * gamePanel.tileSize;
+            heart.y = row * gamePanel.tileSize;
+
+            gamePanel.obj[3] = heart;
+        }
+
     }
 
     public void setEnemy() {
@@ -42,6 +54,4 @@ public class AssetSetter {
             gamePanel.enemy[i] = enemy;
         }
     }
-
-
 }
