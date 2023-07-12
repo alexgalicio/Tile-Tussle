@@ -3,26 +3,22 @@ package entities;
 import main.AssetSetter;
 import main.GamePanel;
 import main.KeyboardInputs;
-import object.TileObjects;
-import org.w3c.dom.UserDataHandler;
+import object.Heart;
 import utilz.LoadSave;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-import static utilz.Constants.ObjectConstants.TILES;
 import static utilz.Constants.PlayerConstants.*;
 
 public class Player extends Entity {
     private KeyboardInputs keyboardInputs;
     private BufferedImage animations[][];
-    public int playerAction = IDLE;
+    private int playerAction = IDLE;
     private boolean moving = false;
+    private AssetSetter assetSetter;
     public final int screenX;
     public final int screenY;
-    //    private int aniTick, aniIndex, aniSpeed = 8;
-    private AssetSetter assetSetter;
-
 
     public Player(GamePanel gamePanel, KeyboardInputs keyboardInputs) {
         super(gamePanel);
@@ -121,8 +117,8 @@ public class Player extends Entity {
         int objectIndex = gamePanel.collisionChecker.checkObject(this, true);
         pickUpObject(objectIndex);
 
-        int monsterIndex = gamePanel.collisionChecker.checkEntity(this, gamePanel.enemy);
-        contactMonster(monsterIndex);
+//        int monsterIndex = gamePanel.collisionChecker.checkEntity(this, gamePanel.enemy);
+//        contactMonster(monsterIndex);
 
         if (!collisionOn) {
             if (keyboardInputs.left || keyboardInputs.right || keyboardInputs.up || keyboardInputs.down) {
@@ -137,8 +133,8 @@ public class Player extends Entity {
     }
 
     private boolean allObjectsCollected() {
-        for (Entity entity : gamePanel.obj) {
-            if (entity != null) {
+        for (int i =0; i < gamePanel.obj.length; i++) {
+            if (gamePanel.obj[i] != null && i != 3) {
                 return false;
             }
         }
@@ -155,19 +151,26 @@ public class Player extends Entity {
         assetSetter.setEnemy();
     }
 
-    private void contactMonster(int monsterIndex) {
-        if (monsterIndex != 999) {
-            if (!invincible) {
-                life -= 1;
-                invincible = true;
-            }
-        }
-    }
+//    private void contactMonster(int monsterIndex) {
+//        if (monsterIndex != 999) {
+//            if (!invincible) {
+//                gamePanel.playSE(4);
+//                life -= 1;
+//                invincible = true;
+//            }
+//        }
+//    }
 
     private void pickUpObject(int objectIndex) {
         if (objectIndex != 999) {
-//            gamePanel.playSE(2);
-            gamePanel.obj[objectIndex] = null;
+            if (gamePanel.obj[objectIndex] instanceof Heart) {
+                gamePanel.playSE(2);
+                gamePanel.obj[objectIndex] = null;
+                life += 1;
+            } else {
+                gamePanel.playSE(2);
+                gamePanel.obj[objectIndex] = null;
+            }
         }
     }
 
@@ -190,21 +193,20 @@ public class Player extends Entity {
         updateAniTick();
         setAnimations();
 
+        if (keyboardInputs.isSpacePressed() && allObjectsCollected()) {
+            if (!gamePanel.shaking) {
+                gamePanel.playSE(1);
+                respawnAndShake();
+                keyboardInputs.setSpacePressed(false);
+                score++;
+            }
+        }
+
         if (invincible) {
             invincibleCounter++;
             if (invincibleCounter > 60) {
                 invincible = false;
                 invincibleCounter = 0;
-            }
-        }
-
-        if (keyboardInputs.isSpacePressed() && allObjectsCollected()) {
-            if (!gamePanel.shaking) {
-                gamePanel.playSE(1);
-                gamePanel.shaking = true;
-                respawnAndShake();
-                keyboardInputs.setSpacePressed(false);
-                score++;
             }
         }
     }
@@ -219,7 +221,7 @@ public class Player extends Entity {
         g.setColor(Color.RED);
         g.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
 
-//        g.drawString("Invincible: " + invincibleCounter, screenX, screenY);
+        g.drawString("Invincible: " + invincibleCounter, screenX, screenY);
 
     }
 }
